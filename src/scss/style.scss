@@ -1,0 +1,118 @@
+@mixin cool_shadow() {
+   box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14),
+                  0 3px 1px -2px rgba(0,0,0,0.2),
+                  0 1px 5px 0 rgba(0,0,0,0.12);
+}
+
+$nice-red: #C14040;
+$cool-blue: #3F51B5;
+
+
+body {
+   background: url('img/b52.png');
+   //background-size: cover; 
+}
+
+aside.sidebar {
+   background: #fff;
+   width: 200px;
+   position: fixed;
+   top: 60px;
+   left: 30px;
+   padding: 30px;
+   padding-top: 150px;
+   @include cool_shadow();
+
+   .logo {
+      width: 200px;
+      position: absolute;
+      top: -46px;
+   }
+
+   form.task-form {
+      input[type="text"], textarea  {
+         width: 185px;
+         //height: 30px;
+         border: 2px solid #ccc;
+         margin-bottom: 20px;
+         font-size: 1.1em;
+         //color: #ccc;
+         padding: 5px;
+         box-sizing: border-box;
+      }
+
+      textarea {
+         max-width: 185px;
+      }
+
+      button{
+         width: 190px;
+         height: 40px;
+         background: $nice-red; 
+         color: #fff;
+         font-size: 1.3em;
+         outline: none;
+         @include cool_shadow();
+         border: none;
+         border-radius: 2px;
+         text-transform: uppercase;
+
+
+         &:hover {
+            cursor: pointer;
+         }
+      }
+
+      
+   }
+}
+
+section.content {
+   margin: 30px;
+   margin-left: 340px;
+
+   //width: 900px;
+   position: relative;
+
+   div.task {
+      float: left;
+      width: 250px;
+      overflow: hidden;
+      border-radius: 2px;
+      background: #fff;
+
+      @include cool_shadow();
+
+      h4.task-title {
+         padding: 10px;
+         margin: 0 0 10px 0;
+         background: $cool-blue;
+         text-align: center;
+         color: #fff;
+      } 
+      
+      p.task-data {
+         padding: 20px;
+         margin: 0;
+      }
+
+      span.task-delete {
+         color: $nice-red;
+         display: block;
+         float: right;
+         margin: 5px;
+         margin-right: 15px;
+         &:hover {
+            cursor: pointer;
+         }
+         
+      }  
+
+      i.task-meta {
+         display: inline-block;
+         margin: 5px;
+         margin-left: 15px;
+      }         
+   }
+  
+}
