@@ -4,6 +4,7 @@ class Task
 {
 	private $db;
 
+
 	public function __construct() {
 		if (!file_exists('kek')) {
 			try {
