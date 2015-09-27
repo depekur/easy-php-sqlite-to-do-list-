@@ -22,7 +22,7 @@ if($_SERVER["REQUEST_METHOD"]=="POST") {
    } elseif (isset($_POST['del'])) {
 
 	   $del = $_POST['del'];
-	   $task->deleteTask($del);
+	   $task->toArchive($del);
 
 	   return true;
 

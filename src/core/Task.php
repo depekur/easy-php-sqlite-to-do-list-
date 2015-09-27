@@ -11,11 +11,14 @@ class Task
 				$this->db = new PDO('sqlite:kek');
 				$this->db -> setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
 	   		$this->db->exec("CREATE TABLE IF NOT EXISTS tasks (
-		                    id INTEGER PRIMARY KEY, 
-		                    title TEXT, 
-		                    message TEXT, 
-		                    time TEXT,
-		                    ip TEXT)");	
+			                    id INTEGER PRIMARY KEY, 
+			                    active INTEGER DEFAULT 1,
+			                    title TEXT, 
+			                    message TEXT, 
+			                    time TEXT,
+			                    finish TEXT DEFAULT 'never',
+			                    ip TEXT
+		                     )");	
 
 
 		      $dt = date('d-m-Y G:i');
@@ -52,10 +55,10 @@ class Task
 		return $data;
 	}
 
-	public function getAll() {
+	public function getAll($a) {
 
 		try {
-			$sth = $this->db->prepare("SELECT * FROM tasks ORDER BY id DESC");
+			$sth = $this->db->prepare("SELECT * FROM tasks WHERE active='$a' ORDER BY id DESC");
 		   $sth->execute();
 		   return $sth;
 
@@ -83,6 +86,11 @@ class Task
 
 	public function deleteTask($del) {
 		$this->db->exec("DELETE FROM tasks WHERE id='$del'");
+	}
+
+	public function toArchive($del) {
+		$fin = date('d-m-Y G:i');
+		$this->db->exec("UPDATE tasks SET active=0, finish='$fin' WHERE id='$del'");
 	}
 
 	public function selectLast() {

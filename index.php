@@ -2,7 +2,7 @@
 include 'src/core/Task.php';
 
 $task = new Task();
-$data = $task->getAll();
+$data = $task->getAll(1);  
 $task->close(); 
 ?>
 
@@ -32,12 +32,37 @@ $task->close();
          <input type="text" maxlength="28" name="title" placeholder="Stop giving up" required autofocus><br>
          <textarea name="message" cols="25" rows="7" placeholder="Make your dreams come true" required ></textarea><br>
          <button type="submit">just do it</button>
+                  
       </form>
+      
+<a href="archive.php"><button  class="task-arh">ARCHIVE</button></a>
    </aside>
 
    <section class="content">
 
-      <?php include 'src/core/loop.php'; ?>
+      <?php 
+
+      foreach ($data as $item) {
+         $id = $item['id'];
+         $title = $item['title'];
+         $message = $item['message'];
+         $time = $item['time'];
+
+      ?>
+
+      <div class="task">
+   
+         <h4 class="task-title"><?=$title;?></h4>
+
+         <p class="task-data" > <?=$message;?> </p>
+
+         <hr>
+         <i class="task-meta"><?=$time;?></i>
+         <span class="task-delete" data-id="<?=$id?>" title="Delete"><i class="fa fa-trash-o"></i></span>      
+       
+      </div>
+
+      <?php  }  //loop end ?>
       
    </section>
 
