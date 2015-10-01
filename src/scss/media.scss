@@ -1,0 +1,78 @@
+@media only screen and (max-width: 700px) { 
+
+   aside.sidebar {
+   	position: relative;
+		width: 100%;
+		top: 0;
+   	left: 0;
+   	padding: 10px;
+   	z-index: 99;
+   	box-sizing: border-box;
+
+   	.logo {
+	      display: none;
+   	}
+	   form.task-form {
+	   	width: 255px;
+	   	margin: 0 auto;
+
+	   	input[type="text"], textarea  {
+	         width: 255px;
+	         //height: 30px;
+	         border: 2px solid #ccc;
+	         margin-bottom: 10px;
+	         font-size: 1em;
+	         //color: #ccc;
+	         padding: 5px;
+	         box-sizing: border-box;
+	      }
+
+	      textarea {
+	         max-width: 255px;
+	         height: 70px;
+	      }
+	      button {
+	      	float: right;
+	      	width: 90px;
+	         height: 30px;
+	         font-size: 1em;
+	         text-transform: lowercase;
+
+	      }
+
+	   }
+	   .task-arh, .task-go-home {
+	   	float: left;
+      	width: 90px;
+         height: 30px;
+         font-size: 1em;
+         text-transform: lowercase;
+	   }
+
+	   .task-form-hr {
+	   	display: none;
+	   }
+
+	   .toggle-mobile-form {
+         //display: block;
+         border-radius: 100%;
+         width: 70px;
+         height: 70px;
+         background: $nice-red;
+         font-size: 2em;
+         outline: none;
+         border: none;
+
+      }
+
+      .archive {
+      	display: none;
+      }
+		
+   }
+
+   section.content {
+   	margin-top: 40px;
+		margin-left: 30px;
+   }
+}

@@ -4,7 +4,10 @@ class Task
 {
 	private $db;
 
-
+	/*
+	* если файл базы уже есть - подключаемся
+	* если нет - создаем базу и добавляем 3 стартовые записи 
+	*/
 	public function __construct() {
 		if (!file_exists('kek')) {
 			try {
@@ -47,6 +50,9 @@ class Task
 		$this->db = null;
 	}
 
+	/*
+	* фильтруем данные
+	*/
 	public function clearData($data){
 		$data = sqlite_escape_string($data);
 		$data = stripslashes($data);
@@ -55,17 +61,40 @@ class Task
 		return $data;
 	}
 
+	/*
+	* принимаем стейтмент, гоним его в массив и отдаем жсон 
+	*/
+	static private function toJson($sth) {
+		$sth->setFetchMode(PDO::FETCH_ASSOC);	
+		while($row = $sth->fetch()){
+	   	$list[] = $row;
+		}
+
+		echo json_encode($list);
+	}
+
+	/*
+	* выбираем все таски из базы
+	* 1 - активные
+	* 0 - архив
+	*/
 	public function getAll($a) {
 
 		try {
 			$sth = $this->db->prepare("SELECT * FROM tasks WHERE active='$a' ORDER BY id DESC");
 		   $sth->execute();
-		   return $sth;
+
+		   self::toJson($sth);	
 
 		} catch (PDOException $e) { echo $e->getMessage(); }
 
 	}
 
+
+	/*
+	* берем текущее время и айпи жертвы
+	* и записываем таску в базу	
+	*/
 	public function addTask($title, $message) {
 
 		$dt = date('d-m-Y G:i');
@@ -88,22 +117,26 @@ class Task
 		$this->db->exec("DELETE FROM tasks WHERE id='$del'");
 	}
 
+	/*
+	* берем текущее время (время удаления, завершения таски)
+	* меняем поле active на 0, т.е. архивируем 
+	*/
 	public function toArchive($del) {
 		$fin = date('d-m-Y G:i');
 		$this->db->exec("UPDATE tasks SET active=0, finish='$fin' WHERE id='$del'");
 	}
 
+	/*
+	* выбираем последнюю добавленную таску
+	* отдаем жсон
+	*/
 	public function selectLast() {
 		try 
 		{
 		   $sth = $this->db->prepare("SELECT * FROM tasks ORDER BY id DESC LIMIT 1");
 		   $sth->execute();
-         $sth->setFetchMode(PDO::FETCH_ASSOC);	
-			while($row = $sth->fetch()){
-		   	$list[] = $row;
-			}
 
-			echo json_encode($list);
+         self::toJson($sth);
 
 		} catch (PDOException $e) { echo $e->getMessage(); }
 

@@ -1,11 +1,3 @@
-<?php 
-include 'src/core/Task.php';
-
-$task = new Task();
-$data = $task->getAll(1);  
-$task->close(); 
-?>
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -25,46 +17,53 @@ $task->close();
 <body>
 
    <aside class="sidebar">
+
       <img class="logo" src="src/img/hipsterlogogenerator_1443267333449.png" alt="to-do list">
 
-      <form class="task-form" method="post" action="index.php">
-
-         <input type="text" maxlength="28" name="title" placeholder="Stop giving up" required autofocus><br>
-         <textarea name="message" cols="25" rows="7" placeholder="Make your dreams come true" required ></textarea><br>
-         <button type="submit">just do it</button>
-                  
-      </form>
-      
-<a href="archive.php"><button  class="task-arh">ARCHIVE</button></a>
-   </aside>
-
-   <section class="content">
-
-      <?php 
-
-      foreach ($data as $item) {
-         $id = $item['id'];
-         $title = $item['title'];
-         $message = $item['message'];
-         $time = $item['time'];
-
-      ?>
-
-      <div class="task">
-   
-         <h4 class="task-title"><?=$title;?></h4>
-
-         <p class="task-data" > <?=$message;?> </p>
-
-         <hr>
-         <i class="task-meta"><?=$time;?></i>
-         <span class="task-delete" data-id="<?=$id?>" title="Delete"><i class="fa fa-trash-o"></i></span>      
-       
+      <div class="archive death">
+         <h2>Archive</h2>
+         <p>Developed by <a href="http://bananagarden.net/">http://bananagarden.net/</a></p>
       </div>
 
-      <?php  }  //loop end ?>
-      
-   </section>
+      <form class="task-form" method="post" action="index.php">
+         <input type="text" maxlength="28" name="title" placeholder="Stop giving up" required autofocus><br>
+         <textarea name="message" cols="25" rows="7" placeholder="Make your dreams come true" required ></textarea><br>
+         <button type="submit">just do it</button>                  
+      </form>
+      <hr class="task-form-hr">
+      <button class="toggle-mobile-form">+</button>
+      <button  class="task-arh">ARCHIVE</button>
+      <button class="task-go-home death">go back</button>
+
+
+   </aside>
+
+   <section class="content"><!-- magic --></section>
+
+
+
+
+<!-- do not touch this elements! -->
+
+   <div class="task death task-active">
+      <h4 class="task-title"></h4>
+      <p class="task-data" ></p>
+      <hr>
+      <i class="task-meta"></i>
+      <span class="task-delete" data-id="" title="Delete"><i class="fa fa-trash-o"></i></span>
+   </div>
+
+   <div class="task death task-archive">
+      <h4 class="task-title"></h4>
+      <p class="task-data" ></p>
+      <hr>
+      <i class="task-meta"></i><br>
+      <i class="task-meta-end"></i>
+   </div>
+
+<!-- do not touch this elements! -->
+
+
 
    <script type="text/javascript" src="src/js/jquery-1.11.3.min.js"></script>
    <script type="text/javascript" src="src/js/wookmark.min.js"></script>

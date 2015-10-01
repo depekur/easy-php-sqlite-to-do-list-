@@ -1,101 +1,158 @@
 (function ($) {
 
 function superGrid(){
-	var wookmark = $('.content').wookmark({
+	$('.content').wookmark({
 		autoResize: true, 
 		offset: 20 
 	});
 }
 
-superGrid();
+function getHome() {
+	$.ajax({
+	   type: "POST",
+	   url: "action.php",
+	   data: { home: true}, 
+	   dataType: 'json',
+	   success: function(data) {
+	   	
+	   	for (var i = 0; i < data.length; i++) {
+				var item = data[i];
+				var $taskActive = $('.task-active').clone().toggleClass('death').toggleClass('task-active');
+
+	      	$taskActive.find('.task-title').text(item.title);
+	      	$taskActive.find('.task-data').text(item.message);
+	      	$taskActive.find('.task-delete').data('id', item.id);
+	      	$taskActive.find('.task-meta').text(item.time);
+
+	      	$taskActive.appendTo(".content");	        
+	      }
+
+	      superGrid();
+	  }
+	});
+	return false;
+}
 
 
+getHome();
 
-// add task
+
+/*
+*	по клику на кнопку добавляем таску
+* 	
+*/
 
 $( "html" ).on('submit', '.task-form', function(event ) {
 	var data, json, html;
 	var $form = $( this );
-	var content = $(".content");
 	
 	event.preventDefault();
 	data = $form.serialize();
+
 	$.ajax({
-         type: "POST",
-         url: "action.php",
-         data: data, 
-         dataType: 'json',
-         success: function(data) {
-           
-            data = data[0];
-            var html = '<div class="task" >'+
-									'<h4 class="task-title">'+data.title+'</h4>'+
-									'<p class="task-data">'+data.message+'</p>'+
-									'<hr>'+
-									'<span class="task-delete" data-id="'+data.id+'" title="Delete"><i class="fa fa-trash-o"></i></span>'+
-									'<i class="task-meta">'+data.time+'</i>'+
-		               	'</div>';
-                         
-            $(html).prependTo(content);
-            $form.find('input[type="text"]').val('');
-            $form.find('textarea').val('');
+      type: "POST",
+      url: "action.php",
+      data: data, 
+      dataType: 'json',
+      success: function(data) {        
+         data = data[0];
+         var $taskActive = $('.task-active').clone().toggleClass('death').toggleClass('task-active');
 
+      	$taskActive.find('.task-title').text(data.title);
+      	$taskActive.find('.task-data').text(data.message);
+      	$taskActive.find('.task-delete').data('id', data.id);
+      	$taskActive.find('.task-meta').text(data.time);
 
-            superGrid();
-        }
-      });
+      	$taskActive.prependTo(".content");
 
- 	return false;
+         $form.find('input[type="text"]').val('');
+         $form.find('textarea').val('');
+
+         superGrid();
+     }
+   });
+
+ 	return false;	
 });
 
 
-// delete task
+/*
+*	по клику на корзинку добавляем текущую таску в архив
+* 	
+*/
 $("html").on('click', '.task-delete', function(event) {
 	event.preventDefault();
 	var $link = $( this );
 	var del = $link.data('id');
 
 	$.ajax({
-		type: "POST",
-		url: "action.php",
-		data: { del: del}, 
-		success: function(data) {
-			$link.parent().remove();
-			superGrid();
+	type: "POST",
+	url: "action.php",
+	data: { del: del}, 
+	success: function(data) {
+		$link.parent().remove();
+		superGrid();
 		}
-
 	});
 	return false;
 });
 
 
 /*
+*	выдаем архив
+* 	
+*/
 $("html").on('click', '.task-arh', function(event) {
 	event.preventDefault();
-	var content = $(".content");
-
 	$.ajax({
 		type: "POST",
 		url: "action.php",
 		data: { arh: true }, 
 		dataType: 'json',
 		success: function(data) {
-			content.find('.task').remove();
+			$(".content").children().remove();
+			$('.task-form').toggleClass('death');
+			$('.archive').toggleClass('death');
+			$('.task-arh').toggleClass('death');
+			$('.task-go-home').toggleClass('death');		
+			
 
-			var html = '<div class="task" >'+
-									'<h4 class="task-title">'+data.title+'</h4>'+
-									'<p class="task-data">'+data.message+'</p>'+
-									'<hr>'+
-									'<span class="task-delete" data-id="'+data.id+'" title="Delete"><i class="fa fa-trash-o"></i></span>'+
-									'<i class="task-meta">'+data.time+'</i>'+
-		               	'</div>';
-                         
-         $(html).prependTo(content);
+			for (var i = 0; i < data.length; i++) {
+				var item = data[i];
+				var $taskArchive = $('.task-archive').clone().toggleClass('death').toggleClass('task-archive');
+
+				$taskArchive.find('.task-title').text(item.title);
+	      	$taskArchive.find('.task-data').text(item.message);
+	      	$taskArchive.find('.task-meta').text('Start: '+item.time);
+	      	$taskArchive.find('.task-meta-end').text('End: '+item.finish);
+
+	      	$taskArchive.appendTo(".content");  
+			}
+			superGrid();
 
 		}
 
 	});
 	return false;
+
 });
+
+
+/*
+*	убираем архив и выдаем домашнюю страницу
+* 	
 */
+$("html").on('click', '.task-go-home', function(event) {
+	event.preventDefault();
+	$(".content").children().remove();
+	$('.task-form').toggleClass('death');
+	$('.archive').toggleClass('death');
+	$('.task-arh').toggleClass('death');
+	$('.task-go-home').toggleClass('death');
+
+	getHome();
+	return false;
+});
+
+
 })(jQuery);
