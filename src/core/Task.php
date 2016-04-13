@@ -54,7 +54,6 @@ class Task
 	* фильтруем данные
 	*/
 	public function clearData($data){
-		$data = sqlite_escape_string($data);
 		$data = stripslashes($data);
 		$data = trim($data);
 		$data = strip_tags($data);
